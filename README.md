@@ -43,11 +43,24 @@ as seen from his own perspective, wins the game.However, the game can also be wo
 9. You will participate with the GitLab commit that you have submitted before the deadline. Any late submissions cannot participate in this tournament.
 10. The code submitted by the Top 4 winners will be inspected after the end of the tournament and you may be invited to explain how it works.
 11. You may use up to 1 MB of pre-computed data.
+12. If you make use of multi-threading in your advanced AI, then you are limited to at most `Runtime.getRuntime().availableProcessors()/2 - 1` threads. Any attempt to make
+more than this number of simultaneously running threads will result in a forfeit.
 
-## Approach to AI
-Below are the main techniques I incorporated into the AI
-1. Functional implementation
-2. Negamax algorithm
-3. Alpha-beta pruning
-4. Transposition table (with Zobrist Hashing)
-5. Iterative deepening with time limit
+## AI Implementation
+Below are the main techniques I incorporated into the AI:
+1. Functional design \
+This means that for every move, a new Board and Game object is created instead of using the same instance throughout a game. This simplifies the algorithm and reduce bugs because I don't have to undo a move every time a move is made in the Negamax algorithm, because the original instance is not affected. 
+2. Negamax algorithm \
+A variant form of Minimax search that is shorter to write. Here is the [pseudocode](https://en.wikipedia.org/wiki/Negamax#:~:text=Negamax%20search%20is%20a%20variant,the%20value%20to%20player%20B)
+3. Alpha-beta pruning \
+An optimisation to Negamax algorithm by reducing the number of nodes the negamax algorithm evaluates in a search tree.
+7. Transposition table (with Zobrist Hashing) \
+Transposition tables selectively memoize the values of nodes in the game tree. When negamax searches the game tree, and encounters the same node multiple times, a transposition table can return a previously computed value of the node, skipping redundant re-computation of the node's value. [Zobrist Hashing](https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-5-zobrist-hashing/) is used to calculate the hash of the board (Array of Arrays) every time a board object is created.
+9. Iterative Deepening with time limit \
+Since the time limit per move is 5 seconds, implementing a stop mechanism is necessary. This is achieved by adding a time check inside the Negamax algorithm. To maximise search depth within the time limit, Iterative Deepening is used to search with increasing depth. The presence of transposition table makes this operation inexpensive.
+
+## Reflection & Potential Areas of Improvement
+This was the best that I could do given the timeframe of 5 days. If given more time, I could have used (bitboard)[https://www.chessprogramming.org/Bitboards] for board representation and move generation. Right now, my move generation is essentially cloning the board 2D Array, and applying the changes, which I suspect is the main bottleneck for the search speed. Other than that, I also could have implemented multi-threading, which I tried and failed. My attempt uses a Java Thread Pool, but somehow when I shut down the ExecutorService, some of the threads did not terminate before the next round. Therefore on the next round, the autorunner detects that I am using more threads than permitted (see Rule 12 above), and the game is forfeited. After numerous attempts I removed the concurrency.
+
+## What next?
+Well since the deadline to submit the code is over, there is no point doing any further modifications to this project. However, I plan to reuse a substantial part of the logic here for the chess engine I am working on. Stay tuned for updates!
