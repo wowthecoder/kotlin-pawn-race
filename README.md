@@ -63,5 +63,10 @@ Since the time limit per move is 5 seconds, implementing a stop mechanism is nec
 This was the best that I could do given the timeframe of 5 days. If given more time, I could have used [bitboard](https://www.chessprogramming.org/Bitboards) for board representation and move generation. Right now, my move generation is essentially cloning the board 2D Array, and applying the changes, which I suspect is the main bottleneck for the search speed. \
 Other than that, I also could have implemented multi-threading, which I tried and failed. My attempt uses a Java Thread Pool, but somehow when I shut down the ExecutorService, some of the threads did not terminate before the next round. Therefore on the next round, the autorunner detects that I am using more threads than permitted (see Rule 12 above), and the game is forfeited. After numerous attempts I removed the concurrency.
 
+There is also a bug where the AI will occasionally take too long to respond when it plays as Black. However, I have yet to pinpoint the issue because this bug occurs very rarely. This bug costed me a few important points that could have gotten me into Top 4. 
+
+## Results
+Number 6 out of 28 participants
+
 ## What next?
 Well since the deadline to submit the code is over, there is no point doing any further modifications to this project. However, I plan to reuse a substantial part of the logic here for the chess engine I am working on. Stay tuned for updates!
